@@ -1,10 +1,14 @@
-var w = 150;
+var w;
+var p;
 var col = 4;
 var grid=[];
 function setup() {
-	createCanvas(w*col+1, w*col+1);
+	createCanvas(1000,1000);
+	w=width/col;
 	background(255);
-	textSize(32);
+	textSize(64);
+	p = createP("Max Score");
+	p.style("font-size", "32pt");
 	for(var i=0;i<col;i++){
 		var a=[];
 			for(var j=0;j<col;j++){
@@ -12,6 +16,9 @@ function setup() {
 			}
 		grid.push(a);
 	}
+	generate();
+	generate();
+	drawgrid();
 }
 
 function drawgrid(){
@@ -31,7 +38,15 @@ function drawgrid(){
 	}
 }
 function draw() {
-	drawgrid();
+}
+function getScore(){
+	var a=0;
+	for(var i=0;i<col;i++){
+		for(var j=0;j<col;j++){
+			a+=grid[i][j];
+		}
+	}
+	return a;
 }
 function maxinGrid(){
 	var a=[0];
@@ -49,9 +64,24 @@ function combine(i,j,a,b){
 		grid[i][j]=0;
 	}
 }
-function MousePressed() {
+
+function generate(){
+	var a=[];
+	for(var i=0;i<col;i++){
+		for(var j=0;j<col;j++){
+			if(grid[i][j]==0)a.push([i,j]);
+		}
+	}
+	if(a.length==0){
+		console.log("Lost with "+getScore()+" pts !");
+		remove();
+	}else{
+		var r=floor(random(a.length));
+		grid[a[r][0]][a[r][1]]=random(1)>0.5 ? 2 : 4;
+	}
 }
 function keyPressed(){
+	let play = true;
 	if (keyCode === RIGHT_ARROW) {
 		for(var x=0;x<col;x++){
 			for(var y=col-2;y>=0;y--){
@@ -76,11 +106,12 @@ function keyPressed(){
 			combine(x,y,0,1);
 			}
 		}
+	}else{
+		played=false;
 	}
-	//generate random tile in empty slot with value 2 or 4
-	
-	do{
-	var index=floor(random(0,16));	
-	}while(grid[index%col][index/col]!=0);
-	grid[index%col][index/col]=floor(random(0,1))*2+2;
+	if(played){
+		generate();
+		p.html(getScore());
+		drawgrid();
+	}
 }
