@@ -2,6 +2,7 @@ var w;
 var p;
 var col = 4;
 var grid=[];
+
 function setup() {
 	createCanvas(1000,1000);
 	w=width/col;
