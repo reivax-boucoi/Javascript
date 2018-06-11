@@ -1,6 +1,7 @@
 var w=100;
 var margin=5;
 var gameOver=0;//0=playing, 1=user won, 2=computer won, 3=draw
+
 // 1=user=cross, 0=null=white, 2=computer=nought
 var current=[[0,0,0],
 			 [0,0,0],
