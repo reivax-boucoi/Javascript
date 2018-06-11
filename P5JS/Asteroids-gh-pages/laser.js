@@ -1,8 +1,3 @@
-// Daniel Shiffman
-// http://codingrainbow.com
-// http://patreon.com/codingrainbow
-// Code for: https://youtu.be/hacZU523FyM
-
 var colors = [
   [248, 12, 18],
   [238, 17, 0],
