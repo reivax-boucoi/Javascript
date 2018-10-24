@@ -189,13 +189,13 @@ function makeHypothesis(ch,i){
             makeHypothesis(ch+1,0);
         }
     }else{
-        //console.log("invalid guess, reverting back !");
+        console.log("invalid path, reverting back !");
         grid=bak;
         if(i+1>=(grid[ch].nums.length)){
-            console.log("changing hypo cell");
-            makeHypothesis(ch+1,0);
+            console.log("previous guess was invalid");
+            //TODO WHAAT ?
         }else{
-            console.log("changing index in same hypo cell");
+            console.log("current guess may have been invalid");
             makeHypothesis(ch,i+1);
         }
     }
