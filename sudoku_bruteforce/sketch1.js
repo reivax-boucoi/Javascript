@@ -10,7 +10,6 @@ var BoxType = function(){
     this.col=-1;
 }
 
-
 function setBox(index, val) {
     grid[index].nums = [];
     grid[index].nums.push(int(val));
@@ -178,7 +177,7 @@ function makeHypothesis(ch,i){
     if(i>=(grid[ch].nums.length))return;
     setBox(ch,grid[ch].nums[i]);
     
-    //console.log("guess is "+grid[ch].nums+" on cell "+ch);
+    console.log("guess is "+grid[ch].nums+" on cell "+ch);
     
     while(loopStep()>0);
     if(isCorrect(grid)){
@@ -218,7 +217,7 @@ function stepF(){
     current++;
     if(current>=81){
         current=0;
-        console.log("Loopped through !");
+        //console.log("Loopped through !");
     }
     return reduccnt;
 }
