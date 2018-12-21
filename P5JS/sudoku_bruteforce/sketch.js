@@ -1,7 +1,8 @@
 //var puzzle = "6.......7....9..2.3.1..259.8....7.13....8....76.3....8.782..1.6.5..3....2.......9";
 
-var puzzle = ".9...3274.3724..1.84.71...33.8..71.94.139...29...614.7..39.274..5.17.36.714..8.2.";//solvable on elimination only
-var puzzle = "................1.84.71...33.8..71.94.139...29...614.7..39.274..5.17.36.714..8.2.";//reduced version, gets stuck on elimination only
+var puzzle1 = "196583274537249816842716593368427159671395682925861437683952741259174368714638925";//solution
+//var puzzle = ".9...3274.3724..1.84.71...33.8..71.94.139...29...614.7..39.274..5.17.36.714..8.2.";//solvable on elimination only
+var puzzle = ".............................8..71.94.139...29...614.7..39.274..5.17.36.714..8.2.";//reduced version, gets stuck on elimination only
 
 //var puzzle = "....23.....4...1...5..84.9...1.7.9.2.93..6.......1.76..........8.......4.6....587";
 var grid = [];
@@ -75,46 +76,47 @@ function deepCopy(obj) {
     return obj;
 }
 
-function solveGrid(j) {
-    
-    stuck = 0;
-    while (!checkFinished() && stuck < 5) {
-        simplify();
-    }
-    console.log("Preliminary simplify done !");
-    if(stuck>4){
+function solveGrid() {
+    simplify();
+    if(checkFinished()){
+        console.log("finished with preliminary simplify!")
+    }else{
         console.log("didn't succed with preliminary simplify, ");
-        stuck=0;
+        makeHypothesis();
+    }
+}
+function makeHypothesis(){
         var i=0;
-        if(j==0)i++;
         while(grid[i++].nums.length==1);
         i--;
-        if(j==undefined)j=grid[i].nums.length-1;
-        console.log("testing with setting grid["+i+"]="+grid[i].nums[j]+" ("+j+" index)");
+        console.log("testing with setting grid["+i+"]="+grid[i].nums[0]);
         var oldgrid=deepCopy(grid);
-        setBox(i,grid[i].nums[j--]);
-        while (!checkFinished() && stuck < 5) {
-            simplify();
-        }
+        setBox(i,grid[i].nums[0]);
+        simplify();
         if(checkFinished()){
-            console.log("finished !")
+            console.log("finished 1!")
             drawGrid();
         }else if(checkErrors()){
             console.log("wrong hypothesis, rolling back !")
             grid=oldgrid;
             drawGrid();
-            solveGrid(j-1);
+            console.log("removing possibility grid["+i+"]="+grid[i].nums[0]+" from list")
+            if(grid[i].nums.length==1)console.log("ooooops!");
+            grid[i].nums.splice(0,1);
+            simplify();
+            if(checkFinished()){
+            console.log("finished 2!")
+            drawGrid();
+            }else{
+                console.log("removing option didn't simplify, trying other option")
+                makeHypothesis();
+            }
             
         }else{
             console.log("adding another hypothesis !");
-            solveGrid();
+            makeHypothesis();
         }
-    }else{
-        console.log("finished !")
-        drawGrid();
-    }
 }
-
 function checkFinished() {
     var finished = true;
     var i = 0;
@@ -139,7 +141,7 @@ function checkErrors(){
             }
         }
         if(cnt.filter(n => n!=1).length){
-            console.log("error on col " +(i+1)+" : "+cnt);
+           // console.log("error on col " +(i+1)+" : "+cnt);
             errcnt++;
         }
     }
@@ -153,7 +155,7 @@ function checkErrors(){
             }
         }
         if(cnt.filter(n => n!=1).length){
-            console.log("error on row " +(i+1)+" : "+cnt);
+           // console.log("error on row " +(i+1)+" : "+cnt);
             errcnt++;
         }
     }
@@ -167,7 +169,7 @@ function checkErrors(){
             }
         }
         if(cnt.filter(n => n!=1).length) {
-            console.log("error on square " +(i%3+1)+","+(floor(i/3)+1)+" : "+cnt);
+            //console.log("error on square " +(i%3+1)+","+(floor(i/3)+1)+" : "+cnt);
             errcnt++;
         }
     }
@@ -261,34 +263,33 @@ function checkSquare(x) {
 }
 
 function simplify() {
-    if (checkFinished()) {
-        console.log("finished !");
-    } else {
-        if (current >= 81) {
-            current = 0;
-            console.log("seems stuck...");
-            stuck++;
-        } else {
-            if (grid[current].nums.length == 1) {
-                current++;
-            } else {
-                checkSquare(current);
-                checkRow(current);
-                checkCol(current);
-                if (grid[current].nums.length == 1) {
-                    current = 0;
-                    console.log("restarting");
-                } else {
-                    current++;
-                }
-            }
-        }
-        if (debug.checked()) {
-            drawGrid();
-        }
+    var changed=1;
+    while(changed){
+        //console.log("loop");
+        current=0;
+        changed=0;
+        for(var i=0;i<81;i++)changed+=stepF();
     }
+    drawGrid();
 }
-
+function stepF(){
+    var changed=0;
+    if (current >= 81) {
+        current = 0;
+    } else if(grid[current].nums.length==1){
+        current++;
+    }else {
+        checkSquare(current);
+        checkRow(current);
+        checkCol(current);
+        if(grid[current].nums.length==1)changed=1;
+        current++;
+    }
+    if (debug.checked()) {
+        drawGrid();
+    }
+    return changed;
+}
 function populateGrid() {
     for (var i = 0; i < 81; i++) {
         grid[i] = new BoxType();
@@ -303,10 +304,14 @@ function setup() {
     background(200);
     textSize(18);
     step = createButton("step");
-    step.mousePressed(simplify);
+    step.mousePressed(stepF);
+    
+    simply = createButton("Simplify!");
+    simply.mousePressed(simplify);
     
     solve = createButton("solve!");
     solve.mousePressed(solveGrid);
+    
     
     debug = createCheckbox("Enable debugging", false);
     debug.changed(drawGrid);
