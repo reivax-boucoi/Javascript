@@ -1,5 +1,5 @@
-var disp =.3;
-var bits=16;
+var disp =.5;
+var bits=9;
 var data =[];
 var ite=0;
 var centroids;
