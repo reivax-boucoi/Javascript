@@ -74,24 +74,32 @@ function setup() {
 
 function draw() {
     background(200);
-    while()
     for(c of cells)c.show();
 }
 
 function mousePressed(){
-    if(mouseX>=0 && mouseY>=0 && mouseX<width && mouseY<width){
-        c=cells[floor(mouseX/w)*row+floor(mouseY/w)];
-        if(!c.revealed){
-            if(c.nb==-1){
+    if(cellsLeft>0){
+        if(mouseX>=0 && mouseY>=0 && mouseX<width && mouseY<width){
+            c=cells[floor(mouseX/w)*row+floor(mouseY/w)];
+            if(!c.revealed){
                 c.revealed=true;
-                console.log("Hit a mine !");
-                noLoop();
-            }else if(c.nb==0){
-                c.revealAdjacent();
+                if(c.nb==-1){
+                    console.log("Hit a mine !");
+                    for(c of cells){
+                        c.revealed=true;
+                        c.show();
+                    }
+                    noLoop();
+                }else if(c.nb==0){
+                    c.revealAdjacent();
+                }else{
+                    cellsLeft--;
+                }
             }
         }
-    }
-    if(cellsLeft==0){
-        console.log()
+        if(cellsLeft==0){
+            console.log("You won !");
+            noLoop();
+        }
     }
 }
