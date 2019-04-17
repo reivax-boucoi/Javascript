@@ -186,11 +186,11 @@ function makeHypothesis(ch,i){
             console.log("Made right guess !");
             return 1;
         }else{
-            console.log("guess seems correct but wasn't enough");
+            //console.log("guess seems correct but wasn't enough");
             makeHypothesis(ch+1,0);
         }
     }else{
-        console.log("invalid guess, reverting back !");
+        //console.log("invalid guess, reverting back !");
         grid=bak;
         if(i+1>=(grid[ch].nums.length)){
             console.log("changing hypo cell");
