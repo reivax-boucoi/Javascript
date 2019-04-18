@@ -178,7 +178,7 @@ function makeHypothesis(ch,i){
     if(i>=(grid[ch].nums.length))return;
     setBox(ch,grid[ch].nums[i]);
     
-    console.log("guess is "+grid[ch].nums+" on cell "+ch);
+    //console.log("guess is "+grid[ch].nums+" on cell "+ch);
     
     while(loopStep()>0);
     if(isCorrect(grid)){
