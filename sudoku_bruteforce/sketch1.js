@@ -168,14 +168,11 @@ function deepCopy(obj) {
 }
 
 function makeHypothesis(ch,i){
-    if(isFinished(grid) || ch>=80)return -1;
-    
+    if(isFinished(grid) || ch>=80)return;
     while(grid[ch].nums.length==1){
         ch++;
         i=0;
     }
-    
-    console.log("hypothesis on "+ch);
     
     var bak=deepCopy(grid);
     if(i>=(grid[ch].nums.length))return;
@@ -187,6 +184,7 @@ function makeHypothesis(ch,i){
     if(isCorrect(grid)){
         if(isFinished(grid)){
             console.log("Made right guess !");
+            return 1;
         }else{
             console.log("guess seems correct but wasn't enough");
             makeHypothesis(ch+1,0);
