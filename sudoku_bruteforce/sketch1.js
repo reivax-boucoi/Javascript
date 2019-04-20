@@ -168,19 +168,20 @@ function deepCopy(obj) {
 }
 
 function makeHypothesis(ch,i){
-    if(isFinished(grid)|| ch>=81)return;
+    if(isFinished(grid) || ch>=80)return -1;
     
-    while(grid[ch].nums.length==1)ch++;
+    while(grid[ch].nums.length==1){
+        ch++;
+        i=0;
+    }
     
     console.log("hypothesis on "+ch);
     
     var bak=deepCopy(grid);
-    console.log(isCorrect(bak));
-    var gc=grid[ch].nums;
-    if(i>=(gc.length))return;
-    setBox(ch,gc[i]);
+    if(i>=(grid[ch].nums.length))return;
+    setBox(ch,grid[ch].nums[i]);
     
-    console.log("guess is "+gc+" on cell "+ch);
+    console.log("guess is "+grid[ch].nums+" on cell "+ch);
     
     while(loopStep()>0);
     if(isCorrect(grid)){
@@ -192,8 +193,14 @@ function makeHypothesis(ch,i){
         }
     }else{
         console.log("invalid guess, reverting back !");
-        console.log(isCorrect(bak));
         grid=bak;
+        if(i+1>=(grid[ch].nums.length)){
+            console.log("changing hypo cell");
+            makeHypothesis(ch+1,0);
+        }else{
+            console.log("changing index in same hypo cell");
+            makeHypothesis(ch,i+1);
+        }
     }
 }
 function setup(){
