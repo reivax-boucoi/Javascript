@@ -125,6 +125,9 @@ function isCorrect(g){
             return 0;
         }
     }
+    
+    for(var i=0;i<81;i++)if(g[i].nums.length==0)return 0;
+    
     return 1;
 }
 function simplifyBox(g,index){
@@ -145,16 +148,37 @@ function simplifyBox(g,index){
     }
     return reduccnt;
 }
+
+function deepCopy(obj) {
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        var out = [], i = 0, len = obj.length;
+        for ( ; i < len; i++ ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    if (typeof obj === 'object') {
+        var out = {}, i;
+        for ( i in obj ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    return obj;
+}
+
 function makeHypothesis(ch,i){
     if(isFinished(grid)|| ch>=81)return;
+    
     while(grid[ch].nums.length==1)ch++;
     
     console.log("hypothesis on "+ch);
     
+    var bak=deepCopy(grid);
+    console.log(isCorrect(bak));
     var gc=grid[ch].nums;
-    var bak=gc.splice(0,gc.length);
-    if(i>=(bak.length))return;
-    gc.push(bak[i++]);
+    if(i>=(gc.length))return;
+    setBox(ch,gc[i]);
     
     console.log("guess is "+gc+" on cell "+ch);
     
@@ -167,7 +191,9 @@ function makeHypothesis(ch,i){
             makeHypothesis(ch+1,0);
         }
     }else{
-        console.log("invalid guess, revert back !");
+        console.log("invalid guess, reverting back !");
+        console.log(isCorrect(bak));
+        grid=bak;
     }
 }
 function setup(){
