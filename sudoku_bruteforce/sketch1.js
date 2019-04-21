@@ -134,10 +134,10 @@ function simplifyBox(g,index){
         c=getKnown(getCol(g,g[index].col));
         s=getKnown(getSquare(g,g[index].square));
         l=l.concat(c);
-        l=l.concat(s);
+        l=uniq(l.concat(s));
         for(var n=0;n<l.length;n++){
             i=g[index].nums.indexOf(l[n]);
-            if(i>0){
+            if(i>=0){
                 g[index].nums.splice(i,1);
                 reduccnt++;
             }
@@ -164,6 +164,7 @@ function makeHypothesis(ch,i){
             console.log("Made right guess !");
         }else{
             console.log("guess seems correct but wasn't enough");
+            makeHypothesis(ch+1,0);
         }
     }else{
         console.log("invalid guess, revert back !");
