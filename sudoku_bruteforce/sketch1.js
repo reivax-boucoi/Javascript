@@ -118,12 +118,12 @@ function isCorrect(g){
         if(uniq(getKnown(getCol(g,i))).length!=getKnown(getCol(g,i)).length){
             return 0;
         }
-       /* if(uniq(getKnown(getLine(g,i))).length!=getKnown(getLine(g,i)).length){
+        if(uniq(getKnown(getLine(g,i))).length!=getKnown(getLine(g,i)).length){
             return 0;
         }
-        if(uniq(getKnown(getSquare(g,i))).length!=getSquare(getCol(g,i)).length){
+        if(uniq(getKnown(getSquare(g,i))).length!=getKnown(getSquare(g,i)).length){
             return 0;
-        }*/
+        }
     }
     return 1;
 }
@@ -159,7 +159,15 @@ function makeHypothesis(ch,i){
     console.log("guess is "+gc+" on cell "+ch);
     
     while(loopStep()>0);
-    if(isFinished(grid))console.log("Made right guess !");
+    if(isCorrect(grid)){
+        if(isFinished(grid)){
+            console.log("Made right guess !");
+        }else{
+            console.log("guess seems correct but wasn't enough");
+        }
+    }else{
+        console.log("invalid guess, revert back !");
+    }
 }
 function setup(){
     setupGrid();
