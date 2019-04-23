@@ -118,12 +118,12 @@ function isCorrect(g){
         if(uniq(getKnown(getCol(g,i))).length!=getKnown(getCol(g,i)).length){
             return 0;
         }
-        if(uniq(getKnown(getLine(g,i))).length!=getKnown(getLine(g,i)).length){
+       /* if(uniq(getKnown(getLine(g,i))).length!=getKnown(getLine(g,i)).length){
             return 0;
         }
         if(uniq(getKnown(getSquare(g,i))).length!=getSquare(getCol(g,i)).length){
             return 0;
-        }
+        }*/
     }
     return 1;
 }
