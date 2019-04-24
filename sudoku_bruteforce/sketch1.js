@@ -115,13 +115,13 @@ function isFinished(g){
 }
 function isCorrect(g){
     for(var i=0;i<9;i++){
-        if(uniq(getKnown(getCol(g,i)))!=getKnown(getCol(g,i))){
+        if(uniq(getKnown(getCol(g,i))).length!=getKnown(getCol(g,i)).length){
             return 0;
         }
-        if(uniq(getKnown(getLine(g,i)))!=getKnown(getLine(g,i))){
+        if(uniq(getKnown(getLine(g,i))).length!=getKnown(getLine(g,i)).length){
             return 0;
         }
-        if(uniq(getKnown(getSquare(g,i)))!=getSquare(getCol(g,i))){
+        if(uniq(getKnown(getSquare(g,i))).length!=getSquare(getCol(g,i)).length){
             return 0;
         }
     }
