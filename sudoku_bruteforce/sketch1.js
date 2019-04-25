@@ -113,7 +113,20 @@ function isFinished(g){
     }
     return 1;
 }
-
+function isCorrect(g){
+    for(var i=0;i<9;i++){
+        if(uniq(getKnown(getCol(g,i)))!=getKnown(getCol(g,i))){
+            return 0;
+        }
+        if(uniq(getKnown(getLine(g,i)))!=getKnown(getLine(g,i))){
+            return 0;
+        }
+        if(uniq(getKnown(getSquare(g,i)))!=getSquare(getCol(g,i))){
+            return 0;
+        }
+    }
+    return 1;
+}
 function simplifyBox(g,index){
     var reduccnt=0;
     if(g[index].nums.length>1){
@@ -146,7 +159,7 @@ function makeHypothesis(ch,i){
     console.log("guess is "+gc+" on cell "+ch);
     
     while(loopStep()>0);
-    if(isFinished)
+    if(isFinished(grid))console.log("Made right guess !");
 }
 function setup(){
     setupGrid();
