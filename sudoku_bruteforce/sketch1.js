@@ -135,12 +135,18 @@ function simplifyBox(g,index){
 function makeHypothesis(ch,i){
     if(isFinished(grid)|| ch>=81)return;
     while(grid[ch].nums.length==1)ch++;
+    
     console.log("hypothesis on "+ch);
+    
     var gc=grid[ch].nums;
     var bak=gc.splice(0,gc.length);
     if(i>=(bak.length))return;
-    gc.push(bak[i]);
+    gc.push(bak[i++]);
     
+    console.log("guess is "+gc+" on cell "+ch);
+    
+    while(loopStep()>0);
+    if(isFinished)
 }
 function setup(){
     setupGrid();
