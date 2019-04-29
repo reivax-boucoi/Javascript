@@ -132,10 +132,15 @@ function simplifyBox(g,index){
     }
     return reduccnt;
 }
-function makeHypothesis(){
-    if(isFinished(grid))return;
-    var ch=0;
+function makeHypothesis(ch,i){
+    if(isFinished(grid)|| ch>=81)return;
     while(grid[ch].nums.length==1)ch++;
+    console.log("hypothesis on "+ch);
+    var gc=grid[ch].nums;
+    var bak=gc.splice(0,gc.length);
+    if(i>=(bak.length))return;
+    gc.push(bak[i]);
+    
 }
 function setup(){
     setupGrid();
