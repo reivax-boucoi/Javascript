@@ -101,12 +101,21 @@ function uniq(a) {
 }
 function isFinished(g){
     for(var i=0;i<9;i++){
-        var a=uniq(getKnown(getCol(g,i)));
-        console.log(a);
+        if(uniq(getKnown(getCol(g,i))).length!=9){
+            return 0;
+        }
+        if(uniq(getKnown(getLine(g,i))).length!=9){
+            return 0;
+        }
+        if(uniq(getKnown(getSquare(g,i))).length!=9){
+            return 0;
+        }
     }
+    return 1;
 }
 
 function simplifyBox(g,index){
+    var reduccnt=0;
     if(g[index].nums.length>1){
         l=getKnown(getLine(g,g[index].line));
         c=getKnown(getCol(g,g[index].col));
@@ -117,9 +126,16 @@ function simplifyBox(g,index){
             i=g[index].nums.indexOf(l[n]);
             if(i>0){
                 g[index].nums.splice(i,1);
+                reduccnt++;
             }
         }
     }
+    return reduccnt;
+}
+function makeHypothesis(){
+    if(isFinished(grid))return;
+    var ch=0;
+    while(grid[ch].nums.length==1)ch++;
 }
 function setup(){
     setupGrid();
@@ -134,16 +150,18 @@ function setup(){
     drawGrid();
 }
 function stepF(){
-    simplifyBox(grid,current);
+    var reduccnt = simplifyBox(grid,current);
     current++;
     if(current>=81){
         current=0;
         console.log("Loopped through !");
     }
+    return reduccnt;
 }
 function loopStep(){
-    stepF();
-    while(current!=0)stepF();
+    var reduccnt=stepF();
+    while(current!=0)reduccnt+=stepF();
+    return reduccnt;
 }
 function draw(){
     drawGrid();
