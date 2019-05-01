@@ -94,6 +94,18 @@ function getKnown(a){
     }
     return num;
 }
+function uniq(a) {
+    return a.sort().filter(function(item, pos, array) {
+        return !pos || item != array[pos - 1];
+    })
+}
+function isFinished(g){
+    for(var i=0;i<9;i++){
+        var a=uniq(getKnown(getCol(g,i)));
+        console.log(a);
+    }
+}
+
 function simplifyBox(g,index){
     if(g[index].nums.length>1){
         l=getKnown(getLine(g,g[index].line));
