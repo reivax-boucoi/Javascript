@@ -130,6 +130,7 @@ function stepF(){
     }
 }
 function loopStep(){
+    stepF();
     while(current!=0)stepF();
 }
 function draw(){
