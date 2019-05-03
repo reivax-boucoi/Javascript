@@ -99,12 +99,8 @@ function simplifyBox(g,index){
         l=getKnown(getLine(g,g[index].line));
         c=getKnown(getCol(g,g[index].col));
         s=getKnown(getSquare(g,g[index].square));
-        console.log(l);
-        console.log(c);
-        console.log(s);
-        l.concat(c);
-        l.concat(s);
-        console.log(l);
+        l=l.concat(c);
+        l=l.concat(s);
         for(var n=0;n<l.length;n++){
             i=g[index].nums.indexOf(l[n]);
             if(i>0){
