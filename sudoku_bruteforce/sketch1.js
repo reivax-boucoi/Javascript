@@ -99,15 +99,13 @@ function simplifyBox(g,index){
         l=getKnown(getLine(g,g[index].line));
         c=getKnown(getCol(g,g[index].col));
         s=getKnown(getSquare(g,g[index].square));
+        console.log(s);
         l.concat(c);
         l.concat(s);
-            console.log(l);
         for(var n=0;n<l.length;n++){
             i=g[index].nums.indexOf(l[n]);
             if(i>0){
-                console.log("splice Arr"+g[index].nums);
                 g[index].nums.splice(i,1);
-                console.log("splice "+n);
             }
         }
     }
