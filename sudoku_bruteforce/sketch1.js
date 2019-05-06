@@ -103,8 +103,9 @@ function simplifyBox(g,index){
         l.concat(s);
             console.log(l);
         for(var n=0;n<l.length;n++){
-            i=g[index].nums.includes(n);
+            i=g[index].nums.indexOf(l[n]);
             if(i>0){
+                console.log("splice Arr"+g[index].nums);
                 g[index].nums.splice(i,1);
                 console.log("splice "+n);
             }
