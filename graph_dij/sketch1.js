@@ -67,6 +67,7 @@ function setup(){
         N[json.Nodes[n].nb]=new Node(json.Nodes[n].x,json.Nodes[n].y,json.Nodes[n].nb);
         if(json.Nodes[n].start){
             N[N.length-1].visited=1;
+            N[N.length-1].currenWeight=1;
             current=N[N.length-1];
         }
         if(json.Nodes[n].end){

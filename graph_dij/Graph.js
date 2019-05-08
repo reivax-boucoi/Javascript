@@ -3,6 +3,7 @@ function Node(x,y,nb){
     this.y=(y+.5)*height/9;
     this.nb=nb;
     this.visited=0;//0: normal, 1:start, 2:end, 3:visited
+    this.currentweight=Infinity;
     this.paths=[];
     this.show=function(c){
         
@@ -24,8 +25,8 @@ function Node(x,y,nb){
         circle(this.x,this.y,40);
         noStroke();
         fill(255);
-        textSize(20);
-        text(this.nb,this.x,this.y+2);
+        textSize(15);
+        text(this.currentweight,this.x,this.y+2);
     }
     this.addPath=function(n,w){
         this.paths.push(new Path(this,n,w));
