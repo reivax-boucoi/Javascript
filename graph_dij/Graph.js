@@ -1,9 +1,8 @@
 function Node(x,y,nb){
-    this.x=x;
-    this.y=y;
-    this.nb=nb
+    this.x=(x+.5)*width/9;
+    this.y=(y+.5)*height/9;
+    this.nb=nb;
     this.visited=0;//0: normal, 1:start, 2:end, 3:visited
-    this.currentweight=Infinity;
     this.paths=[];
     this.show=function(c){
         
@@ -55,5 +54,9 @@ function Sequence(){
     this.add=function(p){
         this.p.push(p);
         this.w+=p.w;
+    }
+    this.run=function(n){
+        for(var i=0;i<this.p.length;i++)
+        if(this.p[i].n2.visited==0)this.p[i].n2.visited=3;
     }
 }

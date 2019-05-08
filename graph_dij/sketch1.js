@@ -5,7 +5,6 @@ let cnv;
 var bsequence;
 var sequence;
 var current;
-var currents=0;
 
 function preload(){
     json=loadJSON("Nodes.json");
@@ -16,18 +15,25 @@ function showPaths(){
         stroke(220);
         strokeWeight(15/sqrt(p.w));
         line(N[p.n1].x,N[p.n1].y,N[p.n2].x,N[p.n2].y);
-        stroke(0);
-        strokeWeight(2);
-        fill(255);
-        textSize(20);
-        text(p.w,(N[p.n1].x+N[p.n2].x)/2,(N[p.n1].y+N[p.n2].y)/2);
     }
     for(var n=0;n<sequence.p.length;n++){
         p=sequence.p[n];
         stroke(200,0,0);
-        strokeWeight(2);
+        strokeWeight(15/sqrt(p.w));
         line(p.n1.x,p.n1.y,p.n2.x,p.n2.y);
     }
+    for(var n=0;n<json.Paths.length;n++){
+        p=json.Paths[n];
+        stroke(0);
+        strokeWeight(3);
+        fill(255);
+        textSize(15);
+        text(p.w,(N[p.n1].x+N[p.n2].x)/2,(N[p.n1].y+N[p.n2].y)/2);
+    }
+    noStroke();
+    fill(255);
+    textSize(40);
+    text("Best="+bsequence.w,width-135,50);
 }
 function ClearSequence(){
     for(var n=0;n<N.length;n++){
@@ -36,18 +42,18 @@ function ClearSequence(){
     }
     cnv.mousePressed(click);
     sequence=new Sequence();
-    currents++;
 }
 function randomSearch(){
     ClearSequence();
-    for(var i=0;i<5000;i++){
+    for(var i=0;i<100000;i++){
         click();
     }
     ClearSequence();
     sequence=bsequence;
+    sequence.run(N);
 }
 function setup(){
-    cnv=createCanvas(windowHeight*.9, windowHeight*.9);
+    cnv=createCanvas(windowWidth, windowHeight*.95);
     cnv.mousePressed(click);
     button = createButton('Random Search');
     button.mousePressed(randomSearch);
