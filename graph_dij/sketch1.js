@@ -1,9 +1,9 @@
 var N=[];
 let json;
+let cnv;
 
-var start;
+var sequence;
 var current;
-var end;
 
 function preload(){
     json=loadJSON("Nodes.json");
@@ -20,6 +20,12 @@ function showPaths(){
         textSize(20);
         text(p.w,(N[p.n1].x+N[p.n2].x)/2,(N[p.n1].y+N[p.n2].y)/2);
     }
+    for(var n=0;n<sequence.length;n++){
+        p=sequence[n];
+        stroke(200,0,0);
+        strokeWeight(2);
+        line(p.n1.x,p.n1.y,p.n2.x,p.n2.y);
+    }
 }
 function setup(){
     cnv=createCanvas(windowHeight*.9, windowHeight*.9);
@@ -33,16 +39,24 @@ function setup(){
         }
         if(json.Nodes[n].end){
             N[N.length-1].visited=2;
-            end=N[N.length-1];
         }
     }
     for(var n=0;n<json.Paths.length;n++){
         p=json.Paths[n];
         N[p.n1].addPath(N[p.n2],p.w);
+        N[p.n2].addPath(N[p.n1],p.w);
     }
+    sequence=new Sequence();
 }
 function click(){
-    console.log(current.paths);
+    var p=current.pickPath();
+    Sequence.add(p);
+    current=p.n2;
+    if(current.visited==2){
+        console.log("Found path !");
+        cnv.mousePressed(false);
+    }
+    if(current.visited==0)current.visited=3;
 }
 
 function draw(){

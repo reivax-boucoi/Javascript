@@ -12,9 +12,9 @@ function Node(x,y,nb){
         }else if (this.visited==1){
             fill(0,200,0);
         }else if(this.visited==3){
-            fill(255,0,128);
-        }else{
             fill(255,0,255);
+        }else{
+            fill(128,128,255);
         }
         strokeWeight(4);
         if(this==c){
@@ -31,6 +31,15 @@ function Node(x,y,nb){
     this.addPath=function(n,w){
         this.paths.push(new Path(this,n,w));
     }
+    this.pickPath=function(){
+        var available=[];
+        for(var i=0;i<this.paths.length;i++){
+            if(this.paths[i].n2.visited==0 || this.paths[i].n2.visited==2){
+                available.push(this.paths[i]);
+            }
+        }
+        return random(available);
+    }
 }
 
 function Path(n1,n2,w){
@@ -38,4 +47,13 @@ function Path(n1,n2,w){
     this.n2=n2;
     this.w=w;
     
+}
+
+function Sequence(){
+    this.p=[];
+    this.weight=0;
+    this.add=function(p){
+        this.p.push(p);
+        this.weight+=p.w;
+    }
 }
