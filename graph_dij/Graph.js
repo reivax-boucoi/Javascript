@@ -3,7 +3,7 @@ function Node(x,y,nb){
     this.y=(y+.5)*height/9;
     this.nb=nb;
     this.visited=0;//0: normal, 1:start, 2:end, 3:visited
-    this.currentweight=Infinity;
+    this.w=Infinity;
     this.paths=[];
     this.show=function(c){
         
@@ -25,20 +25,25 @@ function Node(x,y,nb){
         circle(this.x,this.y,40);
         noStroke();
         fill(255);
-        textSize(15);
-        text(this.currentweight,this.x,this.y+2);
+        if(!checkbox.checked()){
+        textSize(12);
+        text(this.w,this.x,this.y+2);
+        }else{
+        textSize(20);
+        text(this.nb,this.x,this.y+2);
+        }
     }
     this.addPath=function(n,w){
         this.paths.push(new Path(this,n,w));
     }
-    this.pickPath=function(){
+    this.getPath=function(){
         var available=[];
-        for(var i=0;i<this.paths.length;i++){
-            if(this.paths[i].n2.visited==0 || this.paths[i].n2.visited==2){
-                available.push(this.paths[i]);
+        for(p of this.paths){
+            if(p.n2.visited==0 || p.n2.visited==2){
+                available.push(p);
             }
         }
-        return random(available);
+        return available;
     }
 }
 
@@ -47,17 +52,4 @@ function Path(n1,n2,w){
     this.n2=n2;
     this.w=w;
     
-}
-
-function Sequence(){
-    this.p=[];
-    this.w=0;
-    this.add=function(p){
-        this.p.push(p);
-        this.w+=p.w;
-    }
-    this.run=function(n){
-        for(var i=0;i<this.p.length;i++)
-        if(this.p[i].n2.visited==0)this.p[i].n2.visited=3;
-    }
 }
