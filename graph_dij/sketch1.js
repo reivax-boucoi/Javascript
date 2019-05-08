@@ -1,4 +1,4 @@
-var N;
+var N=[];
 let json;
 function preload(){
     json=loadJSON("Nodes.json");
@@ -6,9 +6,14 @@ function preload(){
 
 function setup(){
     createCanvas(windowHeight*.9, windowHeight*.9);
-   N=new Node(100,100);
+    
+    for(var n=0;n<json.Graph.Nodes.length;n++){
+        N.push(new Node(json.Graph.Nodes[n].x,json.Graph.Nodes[n].y));
+    }
 }
 function draw(){
     background(0);
-    N.show();
+    for(var n=0;n<N.length;n++){
+        N[n].show();
+    }
 }
