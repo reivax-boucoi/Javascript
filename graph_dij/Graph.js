@@ -25,8 +25,8 @@ function Node(x,y,nb){
         circle(this.x,this.y,40);
         noStroke();
         fill(255);
-        textSize(30);
-        text(this.nb,this.x,this.y+3);
+        textSize(20);
+        text(this.nb,this.x,this.y+2);
     }
     this.addPath=function(n,w){
         this.paths.push(new Path(this,n,w));

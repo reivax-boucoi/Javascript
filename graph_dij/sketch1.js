@@ -2,8 +2,10 @@ var N=[];
 let json;
 let cnv;
 
+var bsequence;
 var sequence;
 var current;
+var currents=0;
 
 function preload(){
     json=loadJSON("Nodes.json");
@@ -27,22 +29,33 @@ function showPaths(){
         line(p.n1.x,p.n1.y,p.n2.x,p.n2.y);
     }
 }
-function reset(){
+function ClearSequence(){
     for(var n=0;n<N.length;n++){
         if(N[n].visited==3)N[n].visited=0;
         if(N[n].visited==1)current=N[n];
     }
     cnv.mousePressed(click);
     sequence=new Sequence();
+    currents++;
+}
+function randomSearch(){
+    ClearSequence();
+    for(var i=0;i<500;i++){
+        click();
+    }
+    ClearSequence();
+    sequence=bsequence;
 }
 function setup(){
     cnv=createCanvas(windowHeight*.9, windowHeight*.9);
     cnv.mousePressed(click);
-    button = createButton('Reset');
-    button.mousePressed(reset);
+    button = createButton('Random Search');
+    button.mousePressed(randomSearch);
     
     textAlign(CENTER,CENTER);
     sequence=new Sequence();
+    bsequence=new Sequence();
+    bsequence.w=Infinity;
     
     for(var n=0;n<json.Nodes.length;n++){
         N.push(new Node(json.Nodes[n].x,json.Nodes[n].y,n));
@@ -62,17 +75,19 @@ function setup(){
 }
 function click(){
     var p=current.pickPath();
-    if(p){
+    if(p && current.visited!=2){
         sequence.add(p);
         current=p.n2;
         if(current.visited==2){
-            console.log("Found path of length "+sequence.w);
-            cnv.mousePressed(false);
+            if(sequence.w<bsequence.w){
+                bsequence=sequence;//.copy(sequence);
+                console.log("Found w="+bsequence.w);
+            }
         }
         if(current.visited==0)current.visited=3;
     }else{
-        console.log("stuck !");
         cnv.mousePressed(false);
+        ClearSequence();
     }
 }
 
