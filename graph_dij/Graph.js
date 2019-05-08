@@ -15,7 +15,7 @@ function Node(x,y){
         circle(this.x,this.y,40)
     }
     this.addPath=function(n,w){
-        
+        this.paths.push(new Path(this,n,w));
     }
 }
 
