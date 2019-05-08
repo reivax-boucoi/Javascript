@@ -51,9 +51,9 @@ function Path(n1,n2,w){
 
 function Sequence(){
     this.p=[];
-    this.weight=0;
+    this.w=0;
     this.add=function(p){
         this.p.push(p);
-        this.weight+=p.w;
+        this.w+=p.w;
     }
 }
