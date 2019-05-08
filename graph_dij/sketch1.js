@@ -40,7 +40,7 @@ function ClearSequence(){
 }
 function randomSearch(){
     ClearSequence();
-    for(var i=0;i<500;i++){
+    for(var i=0;i<5000;i++){
         click();
     }
     ClearSequence();
@@ -58,7 +58,7 @@ function setup(){
     bsequence.w=Infinity;
     
     for(var n=0;n<json.Nodes.length;n++){
-        N.push(new Node(json.Nodes[n].x,json.Nodes[n].y,json.Nodes[n].nb));
+        N[json.Nodes[n].nb]=new Node(json.Nodes[n].x,json.Nodes[n].y,json.Nodes[n].nb);
         if(json.Nodes[n].start){
             N[N.length-1].visited=1;
             current=N[N.length-1];
@@ -79,9 +79,9 @@ function click(){
         sequence.add(p);
         current=p.n2;
         if(current.visited==2){
-            if(sequence.w<bsequence.w){
+            if(sequence.w<=bsequence.w){
                 bsequence=sequence;
-                console.log("Found w="+bsequence.w);
+                console.log("bw="+bsequence.w);
             }
         }
         if(current.visited==0)current.visited=3;

@@ -14,7 +14,7 @@ function Node(x,y,nb){
         }else if(this.visited==3){
             fill(255,0,255);
         }else{
-            fill(128,128,255);
+            fill(0,0,255);
         }
         strokeWeight(4);
         if(this==c){
