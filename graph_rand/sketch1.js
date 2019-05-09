@@ -63,14 +63,14 @@ function setup(){
     bsequence=new Sequence();
     bsequence.w=Infinity;
     
-    for(var n=0;n<json.Nodes.length;n++){
-        N[json.Nodes[n].nb]=new Node(json.Nodes[n].x,json.Nodes[n].y,json.Nodes[n].nb);
-        if(json.Nodes[n].start){
-            N[N.length-1].visited=1;
-            current=N[N.length-1];
+    for(n of json.Nodes){
+        N[n.nb]=new Node(n.x,n.y,n.nb);
+        if(n.start){
+            N[n.nb].visited=1;
+            current=N[n.nb];
         }
-        if(json.Nodes[n].end){
-            N[N.length-1].visited=2;
+        if(n.end){
+            N[n.nb].visited=2;
         }
     }
     for(var n=0;n<json.Paths.length;n++){
