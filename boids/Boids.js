@@ -111,9 +111,10 @@ class Boid {
     this.acceleration.mult(0);
   }
 
-  show() {
+  show() {/*
     strokeWeight(8);
     stroke(255);
-    point(this.position.x, this.position.y);
+    point(this.position.x, this.position.y);*/
+    image(img,this.position.x,this.position.y,0,0);
   }
 }

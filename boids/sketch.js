@@ -1,7 +1,10 @@
 const flock = [];
-
+let img;
 let alignSlider, cohesionSlider, separationSlider;
 
+function preload(){
+    img=loadImage('g.png');
+}
 function setup() {
   createCanvas(800, 600);
   alignSlider = .1;
