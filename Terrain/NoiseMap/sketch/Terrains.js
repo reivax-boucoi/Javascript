@@ -1,5 +1,5 @@
 class Terrains {
-  var terrain=[];
+	
   constructor() {
     terrain[0]=new Terrain("sea",.3,#07528E);
     terrain[1]=new Terrain("sand",.35,#FBD48A);
@@ -10,12 +10,9 @@ class Terrains {
   }
 }
 class Terrain {
-  var name;
-  var level;
-  var col;
   Terrain(n, l, c){
-    name=n;
-    level=l;
-    col=c;
+    this.name=n;
+    this.level=l;
+    this.col=c;
   }
 }
