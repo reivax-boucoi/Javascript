@@ -1,10 +1,9 @@
 class NoiseRenderer {
-	
   contructor(m) {
-    this.nmap=m;
+    this.nmap=new NoiseMap(width, height, scale, 1, 2, 0.5);;
     this.terrains=new Terrains();
 	this.renderMode=0;
-  }
+  }/*
   render() {
     this.nmap.generate();
     background(0);
@@ -26,5 +25,5 @@ class NoiseRenderer {
         point(x, y);
       }
     }
-  }
+  }*/
 }
