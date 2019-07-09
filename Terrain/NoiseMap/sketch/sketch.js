@@ -4,19 +4,17 @@ var nr;
 
 function setup() {
   createCanvas(640, 480);
-  nm=new NoiseMap(width, height, scale, 1, 2, 0.5);
+  nm=new NoiseMap(width, height, 100, 4, 2, 0.5);
   nr=new NoiseRenderer(nm);
- // nr.render();
+  background(0);
+  nr.render();
 }
 
 function draw() {
+	
 }
 
 function mouseReleased(){
-    if (mouseY>100) {
-    nr.renderMode=1-nr.renderMode;
-  }else{
-    nr.nmap.scl=100/**/;
-  }
-   // nr.render();
+	nr.renderMode=1-nr.renderMode;
+	nr.render();
 }
