@@ -5,7 +5,7 @@ class NoiseMap {
 	this.octOffset=[];
 	for(var i=0;i<layers;i++){
 		this.octOffset[i]=p5.Vector.random2D();
-		this.octOffset[i].setMag(random(-10000,10000));
+		this.octOffset[i].setMag(random(-100000,100000));
 	}
 	this.n=[];
     this.w=w;
@@ -14,6 +14,8 @@ class NoiseMap {
     this.layers=layers;
     this.lacunarity=lacunarity;
     this.persistance=persistance;
+	this.maxNoiseHeight=-Infinity;
+	this.minNoiseHeight=Infinity;
   }
   generate(){
     var xoff=this.w/2;
@@ -30,6 +32,12 @@ class NoiseMap {
 				this.n[x][y]+=noise(nx,ny)*amplitude;
 				amplitude*=this.persistance;
 				frequency*=this.lacunarity;
+			}
+			if(this.n[x][y]<=this.minNoiseHeight){
+				this.minNoiseHeight=this.n[x][y];
+			}
+			if(this.n[x][y]>=this.maxNoiseHeight){
+				this.maxNoiseHeight=this.n[x][y];
 			}
       }
     }
