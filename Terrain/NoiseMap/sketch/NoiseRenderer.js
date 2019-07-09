@@ -1,6 +1,5 @@
 class NoiseRenderer {
 	
-	
   var nmap;
   var terrains;
   var renderMode=0;
