@@ -78,8 +78,9 @@ function deepCopy(obj) {
 }
 
 function solveGrid() {
+
 }
-}
+
 function checkFinished() {
     var finished = true;
     var i = 0;
@@ -147,6 +148,15 @@ function populateGrid() {
             setBox(i, puzzle[i]);
         }
     }
+}
+
+function stepF(){
+    checkErrors();
+    if(checkFinished())console.log("Finished !");
+}
+
+function simplify(){
+    
 }
 
 function setup() {
