@@ -5,6 +5,7 @@ var puzzle1 = "19658327453724981684271659336842715967139568292586143768395274125
 var puzzle = ".............................8..71.94.139...29...614.7..39.274..5.17.36.714..8.2.";//reduced version, gets stuck on elimination only
 
 //var puzzle = "....23.....4...1...5..84.9...1.7.9.2.93..6.......1.76..........8.......4.6....587";
+
 var grid = [];
 var current;
 var step;
@@ -77,45 +78,7 @@ function deepCopy(obj) {
 }
 
 function solveGrid() {
-    simplify();
-    if(checkFinished()){
-        console.log("finished with preliminary simplify!")
-    }else{
-        console.log("didn't succed with preliminary simplify, ");
-        makeHypothesis();
-    }
 }
-function makeHypothesis(){
-        var i=0;
-        while(grid[i++].nums.length==1);
-        i--;
-        console.log("testing with setting grid["+i+"]="+grid[i].nums[0]);
-        var oldgrid=deepCopy(grid);
-        setBox(i,grid[i].nums[0]);
-        simplify();
-        if(checkFinished()){
-            console.log("finished 1!")
-            drawGrid();
-        }else if(checkErrors()){
-            console.log("wrong hypothesis, rolling back !")
-            grid=oldgrid;
-            drawGrid();
-            console.log("removing possibility grid["+i+"]="+grid[i].nums[0]+" from list")
-            if(grid[i].nums.length==1)console.log("ooooops!");
-            grid[i].nums.splice(0,1);
-            simplify();
-            if(checkFinished()){
-            console.log("finished 2!")
-            drawGrid();
-            }else{
-                console.log("removing option didn't simplify, trying other option")
-                makeHypothesis();
-            }
-            
-        }else{
-            console.log("adding another hypothesis !");
-            makeHypothesis();
-        }
 }
 function checkFinished() {
     var finished = true;
@@ -177,119 +140,6 @@ function checkErrors(){
     return errcnt;
 }
 
-function checkNeighbors(index,x){
-    for(var i = 1; i < 10; i++){
-        if (grid[index].nums.length == 1 && index != x) {
-            if((grid[x].nums.indexOf(i)!=-1) && grid[index].nums[0]==i){
-                grid[x].nums.splice(grid[x].nums.indexOf(i),1);
-            }
-        }
-        if(grid[index].nums.indexOf(i)!=-1){
-            cnt[i-1]++;
-        }
-    }
-}
-
-function checkRow(x) {
-    cnt=[0,0,0,0,0,0,0,0,0];
-    for (var j = 0; j < 9; j++) {
-        var index = floor(x / 9) * 9 + j;
-        checkNeighbors(index,x);
-    }
-    for(var i=0;i<9;i++){
-        if(cnt[i]==1){
-            for (var j = 0; j < 9; j++) {
-                var index = floor(x / 9) * 9 + j;
-                if(grid[index].nums.indexOf(i+1)!=-1){
-                    setBox(index,i+1);
-                }
-            }
-        }
-    }
-}
-
-function checkCol(x) {
-    cnt=[0,0,0,0,0,0,0,0,0];
-    for (var j = 0; j < 9; j++) {
-        var index = (x % 9) + j * 9;
-        checkNeighbors(index,x);
-    }
-    for(var i=0;i<9;i++){
-        if(cnt[i]==1){
-            for (var j = 0; j < 9; j++) {
-                var index = (x % 9) + j * 9;
-                if(grid[index].nums.indexOf(i+1)!=-1){
-                    setBox(index,i+1);
-                }
-            }
-        }
-    }
-}
-
-function checkSquare(x) {
-    cnt=[0,0,0,0,0,0,0,0,0];
-    for (var j = 0; j < 3; j++) {
-        for (var k = 0; k < 3; k++) {
-            var index = 3 * floor((x % 9) / 3) + 27 * floor(x / 27) + j + k * 9;
-            /*var twin1 = [];
-            *			var twin2 = [];
-            *			var twin3 = [];
-            *			for(c=0;c<3;c++){
-            *				for(i=0;i<3;i++){
-            *					
-        }
-        
-        }
-        //for 3 cols
-        // compute common numbers for each
-        // for each nb in col, if != to nb in other col,
-        // remove nb from other nbs in whole col
-        */
-            checkNeighbors(index,x,i);
-        }
-    }
-    for(var i=0;i<9;i++){
-        if(cnt[i]==1){
-            for (var j = 0; j < 3; j++) {
-                for (var k = 0; k < 3; k++) {
-                    var index = 3 * floor((x / 3) % 3) + 27 * floor(x / 27) + j + k * 9;
-                    if(grid[index].nums.indexOf(i+1)!=-1){
-                        setBox(index,i+1);
-                    }
-                }
-            }
-        }
-    }
-}
-
-function simplify() {
-    var changed=1;
-    while(changed){
-        //console.log("loop");
-        current=0;
-        changed=0;
-        for(var i=0;i<81;i++)changed+=stepF();
-    }
-    drawGrid();
-}
-function stepF(){
-    var changed=0;
-    if (current >= 81) {
-        current = 0;
-    } else if(grid[current].nums.length==1){
-        current++;
-    }else {
-        checkSquare(current);
-        checkRow(current);
-        checkCol(current);
-        if(grid[current].nums.length==1)changed=1;
-        current++;
-    }
-    if (debug.checked()) {
-        drawGrid();
-    }
-    return changed;
-}
 function populateGrid() {
     for (var i = 0; i < 81; i++) {
         grid[i] = new BoxType();
