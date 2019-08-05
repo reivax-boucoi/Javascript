@@ -1,14 +1,18 @@
 function Node(p,value){
     if(p==null){
         this.x=width/2;
+        this.xspacing=width*0.47;
         this.y=50;
+        this.depth=0;
     }else{
+        this.xspacing=p.xspacing/2;
         if(p.value>value){
-            this.x=p.x-50;
+            this.x=p.x-this.xspacing;
         }else{
-            this.x=p.x+50;
+            this.x=p.x+this.xspacing;
         }
-        this.y=p.y+50;
+        this.y=p.y+10*sqrt(this.xspacing);
+        this.depth=p.depth+1;
     }
     this.parent=p;
     this.value=value;
@@ -27,12 +31,11 @@ function Node(p,value){
             this.rightChild.show();
         }
         fill(0,0,255);
-        stroke(255);
-        strokeWeight(4);
-        circle(this.x,this.y,40);
+        stroke(255);;
+        circle(this.x,this.y,2+4*sqrt(this.xspacing));
         noStroke();
         fill(255);
-        textSize(20);
+        textSize(3*sqrt(this.xspacing));
         text(this.value,this.x,this.y+2);
     }
 }
@@ -40,23 +43,11 @@ function Node(p,value){
 
 function Tree(firstValue){
     this.origin=new Node(null,firstValue);
-    this.depthArray=[];
-    this.depthArray.push([this.origin]);
+    
     this.show=function(){
         this.origin.show();
     }
-    this.setWidth=function(){
-        var n=this.depthArray[this.depthArray.length-1].length;
-        console.log(n);
-        for(var i=0;i<n;i++){
-            var row=this.depthArray[this.depthArray.length-1];
-            console.log(i,i/n);
-            //row[i].x=((i/n)-0.5)*width*0.8;
-            console.log(row[i].x);
-        }
-        
-        
-    }
+
     this.insert=function(value){
         var currentNode=this.origin;
         var inserted=false;
@@ -66,11 +57,6 @@ function Tree(firstValue){
                     currentNode=currentNode.leftChild;
                 }else{
                     currentNode.leftChild=new Node(currentNode,value);
-                    if(this.depthArray[currentNode.leftChild.depth]==null){
-                        this.depthArray[currentNode.leftChild]=new Array(currentNode.leftChild);
-                    }else{
-                        this.depthArray[currentNode.leftChild.depth].push(currentNode.leftChild);
-                    }
                     inserted=true;
                 }
             }else if(value>currentNode.value){
@@ -78,11 +64,6 @@ function Tree(firstValue){
                     currentNode=currentNode.rightChild;
                 }else{
                     currentNode.rightChild=new Node(currentNode,value);
-                    if(this.depthArray[currentNode.rightChild.depth]==null){
-                        this.depthArray[currentNode.rightChild]=new Array(currentNode.rightChild);
-                    }else{
-                        this.depthArray[currentNode.rightChild.depth].push(currentNode.rightChild);
-                    }
                     inserted=true;
                 }       
             }else{
@@ -90,6 +71,5 @@ function Tree(firstValue){
                 console.log("existing value in tree !");
             }
         }
-        this.setWidth();
     }
 }
