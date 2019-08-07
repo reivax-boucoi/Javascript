@@ -6,10 +6,11 @@ function setup(){
     
     textAlign(CENTER,CENTER);
     
-    tree=new Tree(5);
+    tree=new Tree(50);
     
 }
 function click(){
+    tree.insert(floor(random(100)));
 }
 
 function draw(){

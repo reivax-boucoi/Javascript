@@ -42,35 +42,30 @@ function Node(p,value){
 
 function Tree(firstValue){
     this.origin=new Node(null,firstValue);
-    this.depthArray=[];
-    this.depthArray.push(new Array(this.origin));
     this.show=function(){
         this.origin.show();
     }
     this.insert=function(value){
         var currentNode=this.origin;
-        console.log("inserting "+value);
         var inserted=false;
         while(!inserted){
-            console.log("currentValue "+currentNode.value);
             if(value<currentNode.value){
-                console.log("less");
                 if(currentNode.leftChild!=null){
                     currentNode=currentNode.leftChild;
                 }else{
                     currentNode.leftChild=new Node(currentNode,value);
-                    this.depthArray[currentNode.leftChild.depth].push(currentNode.leftChild);
                     inserted=true;
                 }
-            }else{
-                console.log("more");
+            }else if(value>currentNode.value){
                 if(currentNode.rightChild!=null){
                     currentNode=currentNode.rightChild;
                 }else{
                     currentNode.rightChild=new Node(currentNode,value);  
-                    this.depthArray[currentNode.rightChild.depth].push(currentNode.rightChild); 
                     inserted=true;
                 }       
+            }else{
+                inserted=true;
+                console.log("existing value in tree !");
             }
         }
     }
