@@ -42,7 +42,7 @@ function Node(p,value){
 
 function Tree(firstValue){
     this.origin=new Node(null,firstValue);
-    this.depthArray=[];
+    this.depthArray=new Array();
     this.depthArray[0].push(origin);
     this.show=function(){
         this.origin.show();
