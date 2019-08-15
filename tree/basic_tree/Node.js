@@ -2,6 +2,7 @@ function Node(p,value){
     if(p==null){
         this.x=width/2;
         this.y=50;
+        this.depth=0;
     }else{
         if(p.value>value){
             this.x=p.x-50;
@@ -9,6 +10,7 @@ function Node(p,value){
             this.x=p.x+50;
         }
         this.y=p.y+50;
+        this.depth=p.depth+1;
     }
     this.parent=p;
     this.value=value;
@@ -40,7 +42,8 @@ function Node(p,value){
 
 function Tree(firstValue){
     this.origin=new Node(null,firstValue);
-    
+    this.depthArray=[];
+    this.depthArray[0].push(origin);
     this.show=function(){
         this.origin.show();
     }
@@ -49,22 +52,24 @@ function Tree(firstValue){
         console.log("inserting "+value);
         var inserted=false;
         while(!inserted){
-        console.log("currentValue "+currentNode.value);
+            console.log("currentValue "+currentNode.value);
             if(value<currentNode.value){
                 console.log("less");
                 if(currentNode.leftChild!=null){
                     currentNode=currentNode.leftChild;
                 }else{
-                 currentNode.leftChild=new Node(currentNode,value);
-                 inserted=true;
+                    currentNode.leftChild=new Node(currentNode,value);
+                    this.depthArray[currentNode.leftChild.depth].push(currentNode.leftChild);
+                    inserted=true;
                 }
             }else{
                 console.log("more");
                 if(currentNode.rightChild!=null){
                     currentNode=currentNode.rightChild;
                 }else{
-                 currentNode.rightChild=new Node(currentNode,value);   
-                 inserted=true;
+                    currentNode.rightChild=new Node(currentNode,value);  
+                    this.depthArray[currentNode.rightChild.depth].push(currentNode.rightChild); 
+                    inserted=true;
                 }       
             }
         }
