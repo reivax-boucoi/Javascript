@@ -3,7 +3,11 @@ function Node(p,value){
         this.x=width/2;
         this.y=50;
     }else{
-        this.x=p.x-50;
+        if(p.value>value){
+            this.x=p.x-50;
+        }else{
+            this.x=p.x+50;
+        }
         this.y=p.y+50;
     }
     this.parent=p;
@@ -41,12 +45,13 @@ function Tree(firstValue){
         this.origin.show();
     }
     this.insert=function(value){
-        var currentNode=origin;
+        var currentNode=this.origin;
         console.log("inserting "+value);
         var inserted=false;
         while(!inserted){
-                console.log("here");
+        console.log("currentValue "+currentNode.value);
             if(value<currentNode.value){
+                console.log("less");
                 if(currentNode.leftChild!=null){
                     currentNode=currentNode.leftChild;
                 }else{
@@ -54,6 +59,7 @@ function Tree(firstValue){
                  inserted=true;
                 }
             }else{
+                console.log("more");
                 if(currentNode.rightChild!=null){
                     currentNode=currentNode.rightChild;
                 }else{
