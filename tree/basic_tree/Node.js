@@ -1,6 +1,11 @@
 function Node(p,value){
-    this.x=width/2;
-    this.y=50;
+    if(p==null){
+        this.x=width/2;
+        this.y=50;
+    }else{
+        this.x=p.x-50;
+        this.y=p.y+50;
+    }
     this.parent=p;
     this.value=value;
     this.leftChild=null;
@@ -37,8 +42,10 @@ function Tree(firstValue){
     }
     this.insert=function(value){
         var currentNode=origin;
+        console.log("inserting "+value);
         var inserted=false;
         while(!inserted){
+                console.log("here");
             if(value<currentNode.value){
                 if(currentNode.leftChild!=null){
                     currentNode=currentNode.leftChild;
