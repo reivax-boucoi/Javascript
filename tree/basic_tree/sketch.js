@@ -1,4 +1,4 @@
-var n;
+var tree;
 
 function setup(){
     cnv=createCanvas(640,480);
@@ -6,7 +6,7 @@ function setup(){
     
     textAlign(CENTER,CENTER);
     
-    n=new Node(null,5);
+    tree=new Tree(5);
     
 }
 function click(){
@@ -14,5 +14,5 @@ function click(){
 
 function draw(){
     background(0);
-    n.show();
+    tree.show();
 }
