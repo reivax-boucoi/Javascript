@@ -18,6 +18,7 @@ function Node(p,value){
             this.rightChild.show();
         }
         fill(0,0,255);
+        stroke(255);
         strokeWeight(4);
         circle(this.x,this.y,40);
         noStroke();
@@ -33,5 +34,26 @@ function Tree(firstValue){
     
     this.show=function(){
         this.origin.show();
+    }
+    this.insert=function(value){
+        var currentNode=origin;
+        var inserted=false;
+        while(!inserted){
+            if(value<currentNode.value){
+                if(currentNode.leftChild!=null){
+                    currentNode=currentNode.leftChild;
+                }else{
+                 currentNode.leftChild=new Node(currentNode,value);
+                 inserted=true;
+                }
+            }else{
+                if(currentNode.rightChild!=null){
+                    currentNode=currentNode.rightChild;
+                }else{
+                 currentNode.rightChild=new Node(currentNode,value);   
+                 inserted=true;
+                }       
+            }
+        }
     }
 }
