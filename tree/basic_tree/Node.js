@@ -4,11 +4,21 @@ function Node(p,value){
     this.parent=p;
     this.value=value;
     this.leftChild=null;
-    this.RightChild=null;
+    this.rightChild=null;
     this.show=function(){
+        if(this.parent != null){
+            strokeWeight(1);
+            stroke(250);
+            line(this.x,this.y,this.parent.x,this.parent.y);
+        }
+        if(this.leftChild != null){
+            this.leftChild.show();
+        }
+        if(this.rightChild != null){
+            this.rightChild.show();
+        }
         fill(0,0,255);
         strokeWeight(4);
-        stroke(255);   
         circle(this.x,this.y,40);
         noStroke();
         fill(255);
