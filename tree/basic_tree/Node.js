@@ -6,9 +6,9 @@ function Node(p,value){
     this.leftChild=null;
     this.RightChild=null;
     this.show=function(){
-            fill(0,0,255);
+        fill(0,0,255);
         strokeWeight(4);
-            stroke(255);   
+        stroke(255);   
         circle(this.x,this.y,40);
         noStroke();
         fill(255);
@@ -18,3 +18,10 @@ function Node(p,value){
 }
 
 
+function Tree(firstValue){
+    this.origin=new Node(null,firstValue);
+    
+    this.show=function(){
+        this.origin.show();
+    }
+}
