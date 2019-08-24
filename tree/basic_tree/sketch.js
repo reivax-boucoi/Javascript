@@ -1,3 +1,4 @@
+var n;
 
 function setup(){
     cnv=createCanvas(640,480);
@@ -5,7 +6,7 @@ function setup(){
     
     textAlign(CENTER,CENTER);
     
-    Node n=new Node(null,5);
+    n=new Node(null,5);
     
 }
 function click(){
