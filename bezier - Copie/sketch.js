@@ -12,8 +12,8 @@ function Node(x,y){
         strokeWeight(2);
 		if(!Hidecheckbox.checked()){
 			circle(this.pos.x,this.pos.y,20);
-			fill(255);
-			text(i,this.pos.x,this.pos.y);
+			//fill(255);
+			//text(i,this.pos.x,this.pos.y);
 		}
     }
 }
