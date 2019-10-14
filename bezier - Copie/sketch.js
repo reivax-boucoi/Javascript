@@ -1,4 +1,4 @@
-let Autocheckbox,Hidecheckbox,slider;
+let Autocheckbox,Hidecheckbox,slider,Ptscheckbox,p;
 function Node(x,y){
     this.pos=createVector(x,y);
     this.anchor=true;
@@ -34,8 +34,16 @@ function Path(){
     this.n=[];
 	this.pts=[];
     this.selectedNode=null;
+	this.showPts=function(){
+		fill(255);
+		strokeWeight(1);
+		for(let p of pts){
+			circle(p.x,p.y,5);
+		}
+	}
 	this.calculatePts=function(){
 		let dst=0;
+		pts=[];
 		pts.push(p.n[0].pos);
 		let ppt=pts[0];
 		let spacing=map(slider.value(),0,1,100,5);;
@@ -74,6 +82,7 @@ function Path(){
         this.n.push(b2);
         this.n.push(a);
 		if(Autocheckbox.checked())AutoSet();
+		this.calculatePts();
     }
     
     this.init=function(){
@@ -87,6 +96,7 @@ function Path(){
         this.n.push(n2);
         this.n.push(n3);
         this.n.push(n1);
+		this.calculatePts();
     }
     
     this.show=function(){
@@ -141,11 +151,13 @@ function Path(){
             }
         }
 		if(Autocheckbox.checked())AutoSet();
+		this.calculatePts();
     }
     this.removeAnchor=function(n){
         if(n>0 && n<this.n.length-1){
             this.n.splice(n-1,3);
         }
+		this.calculatePts();
     }
 }
 function setup(){
@@ -154,12 +166,15 @@ function setup(){
     cnv.mouseReleased(MouseReleased);
     cnv.mouseMoved(MouseMoved);
 	Autocheckbox = createCheckbox('AutoSet', false);
-	Autocheckbox.changed(AutoSet);
+	Autocheckbox.changed(AutocheckboxChanged);
 	Autocheckbox.position(10,600);
 	Hidecheckbox=createCheckbox('Hide Handles',false);
 	Hidecheckbox.position(Autocheckbox.x+75,Autocheckbox.y);
 	slider=createSlider(0,1,0.5,0.01);
 	slider.position(Hidecheckbox.x+150,Hidecheckbox.y);
+	slider.mouseMoved(sliderChanged);
+	Ptscheckbox=createCheckbox('Show Pts',false);
+	Ptscheckbox.position(slider.x+180,slider.y);
     p=new Path();
 	textSize(15);
 	textAlign(CENTER,CENTER);
@@ -170,12 +185,12 @@ function setup(){
 function draw(){
     background(200);
     p.show();
-	for(let p of pts){
-		circle(p.x,p.y,5);
-	}
+	if(Ptscheckbox.checked())p.showPts();
 	//}
 }
-
+function sliderChanged(){
+	p.calculatePts();
+}
 function MouseMoved(){
     var over=false;
     for(var i=0;i<p.n.length;i++){
@@ -223,6 +238,11 @@ function MousePressed(){
         }
     }
 }
+function AutocheckboxChanged(){
+	AutoSet();
+	p.calculatePts();
+}
+
 function AutoSet(){
     for(var i=1;i<p.n.length-1;i++){
 		if(p.n[i].anchor){
