@@ -32,7 +32,30 @@ function EvaluateCubic(a,b,c,d,t){
 
 function Path(){
     this.n=[];
+	this.pts=[];
     this.selectedNode=null;
+	this.calculatePts=function(){
+		let dst=0;
+		pts.push(p.n[0].pos);
+		let ppt=pts[0];
+		let spacing=map(slider.value(),0,1,100,5);;
+		for(let i=0;i<(p.n.length-1);i+=3){
+			let t=0;
+			while(t<=1){
+				t+=0.01;
+				let pt=EvaluateCubic(p.n[i].pos,p.n[i+1].pos,p.n[i+2].pos,p.n[i+3].pos,t);
+				dst+=p5.Vector.dist(pt,ppt);
+				while(dst>=spacing){
+					let overshoot=dst-spacing;
+					let newpt=p5.Vector.add(pt,p5.Vector.sub(ppt,pt).normalize().mult(overshoot));
+					pts.push(newpt);
+					dst=overshoot;
+					ppt=newpt;
+				}
+				ppt=pt;
+			}
+		}
+	}
     this.addAnchor=function(x,y){
         var a=new Node(x,y);
         
@@ -135,7 +158,7 @@ function setup(){
 	Autocheckbox.position(10,600);
 	Hidecheckbox=createCheckbox('Hide Handles',false);
 	Hidecheckbox.position(Autocheckbox.x+75,Autocheckbox.y);
-	slider=createSlider(0,100,50,1);
+	slider=createSlider(0,1,0.5,0.01);
 	slider.position(Hidecheckbox.x+150,Hidecheckbox.y);
     p=new Path();
 	textSize(15);
@@ -147,26 +170,9 @@ function setup(){
 function draw(){
     background(200);
     p.show();
-	//for(let i=0;i<(p.n.length-1);i+=3){
-		let spacing=slider.value();
-		let t=0;
-		let pts=[];
-		let dst=0;
-		pts.push(p.n[0].pos);
-		let ppt=pts[0];
-		while(t<=1){
-			t+=0.1;
-			let pt=EvaluateCubic(p.n[0].pos,p.n[1].pos,p.n[2].pos,p.n[3].pos,t);
-			dst+=p5.Vector.dist(pt,ppt);
-			if(dst>=spacing){
-				let overshoot=dst-spacing;
-			}
-			ppt=pt;
-			pts.push(pt);
-		}
-		for(let p of pts){
-			circle(p.x,p.y,20);
-		}
+	for(let p of pts){
+		circle(p.x,p.y,5);
+	}
 	//}
 }
 
