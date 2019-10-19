@@ -1,3 +1,4 @@
+let Autocheckbox,Hidecheckbox,slider;
 function Node(x,y){
     this.pos=createVector(x,y);
     this.anchor=true;
@@ -9,11 +10,26 @@ function Node(x,y){
         }
         stroke(0);
         strokeWeight(2);
-        circle(this.pos.x,this.pos.y,20);
-		fill(255);
-		text(i,this.pos.x,this.pos.y);
+		if(!Hidecheckbox.checked()){
+			circle(this.pos.x,this.pos.y,20);
+			fill(255);
+			text(i,this.pos.x,this.pos.y);
+		}
     }
 }
+
+function EvaluateQuadratic(a,b,c,t){
+	let d=p5.Vector.lerp(a,b,t);
+	let e=p5.Vector.lerp(b,c,t);
+	return p5.Vector.lerp(d,e,t);
+}
+
+function EvaluateCubic(a,b,c,d,t){
+	let e=EvaluateQuadratic(a,b,c,t);
+	let f=EvaluateQuadratic(b,c,d,t);
+	return p5.Vector.lerp(e,f,t);
+}
+
 function Path(){
     this.n=[];
     this.selectedNode=null;
@@ -34,6 +50,7 @@ function Path(){
         this.n.push(b1);
         this.n.push(b2);
         this.n.push(a);
+		if(Autocheckbox.checked())AutoSet();
     }
     
     this.init=function(){
@@ -61,12 +78,12 @@ function Path(){
             
             stroke(75);
             strokeWeight(1);
-            if(i>0){
+            if(i>0 && !Hidecheckbox.checked()){
                 line(this.n[i].pos.x,this.n[i].pos.y,this.n[i-1].pos.x,this.n[i-1].pos.y);
                 this.n[i-1].show(i-1);
                 
             }
-            if(i+1<this.n.length){
+            if(i+1<this.n.length && !Hidecheckbox.checked()){
                 line(this.n[i].pos.x,this.n[i].pos.y,this.n[i+1].pos.x,this.n[i+1].pos.y);
                 this.n[i+1].show(i+1);
             }
@@ -88,7 +105,7 @@ function Path(){
             if(n+1<this.n.length){
                 this.n[n+1].pos.add(delta);
             }
-        }else{
+        }else if(! Autocheckbox.checked()){
             if( (n>1) && (n+2<this.n.length)){
                 var indexOffset=1;
                 if(n%3==1){
@@ -100,6 +117,7 @@ function Path(){
                 this.n[n+2*indexOffset].pos=v;
             }
         }
+		if(Autocheckbox.checked())AutoSet();
     }
     this.removeAnchor=function(n){
         if(n>0 && n<this.n.length-1){
@@ -112,8 +130,13 @@ function setup(){
     cnv.mousePressed(MousePressed);
     cnv.mouseReleased(MouseReleased);
     cnv.mouseMoved(MouseMoved);
-	let button = createButton('Auto');
-	button.mousePressed(buttonAuto);
+	Autocheckbox = createCheckbox('AutoSet', false);
+	Autocheckbox.changed(AutoSet);
+	Autocheckbox.position(10,600);
+	Hidecheckbox=createCheckbox('Hide Handles',false);
+	Hidecheckbox.position(Autocheckbox.x+75,Autocheckbox.y);
+	slider=createSlider(0,100,50,1);
+	slider.position(Hidecheckbox.x+150,Hidecheckbox.y);
     p=new Path();
 	textSize(15);
 	textAlign(CENTER,CENTER);
@@ -124,6 +147,27 @@ function setup(){
 function draw(){
     background(200);
     p.show();
+	//for(let i=0;i<(p.n.length-1);i+=3){
+		let spacing=slider.value();
+		let t=0;
+		let pts=[];
+		let dst=0;
+		pts.push(p.n[0].pos);
+		let ppt=pts[0];
+		while(t<=1){
+			t+=0.1;
+			let pt=EvaluateCubic(p.n[0].pos,p.n[1].pos,p.n[2].pos,p.n[3].pos,t);
+			dst+=p5.Vector.dist(pt,ppt);
+			if(dst>=spacing){
+				let overshoot=dst-spacing;
+			}
+			ppt=pt;
+			pts.push(pt);
+		}
+		for(let p of pts){
+			circle(p.x,p.y,20);
+		}
+	//}
 }
 
 function MouseMoved(){
@@ -173,26 +217,27 @@ function MousePressed(){
         }
     }
 }
-function buttonAuto(){
-    for(var i=0;i<p.n.length;i++){
+function AutoSet(){
+    for(var i=1;i<p.n.length-1;i++){
 		if(p.n[i].anchor){
-			if(i>0 && i<p.n.length-1){
-				let current=p.n[i].pos;
-				let prev=p.n[i-3].pos;
-				let next=p.n[i+3].pos;
-				let dir1=p5.Vector.sub(prev,current);
-				let Mag1=dir1.mag()/2;
-				let dir2=p5.Vector.sub(current,next);
-				let Mag2=dir2.mag()/2;
-				dir1.normalize();
-				dir2.normalize();
-				dir1.add(dir2);
-				dir2=
-				console.log(Mag1,Mag2);
-				/*p.n[i-1].pos=dir1current;
-				p.n[i+1].pos=dir2current;*/
-				
-			}
+			let current=p.n[i].pos;
+			let prev=p.n[i-3].pos;
+			let next=p.n[i+3].pos;
+			let dir1=p5.Vector.sub(prev,current);
+			let Mag1=dir1.mag()/2;
+			let dir2=p5.Vector.sub(current,next);
+			let Mag2=dir2.mag()/2;
+			dir1.normalize();
+			dir2.normalize();
+			dir1.add(dir2).normalize();
+			dir2=p5.Vector.mult(dir1,-Mag2);
+			dir1.setMag(Mag1);
+			dir2.add(current);
+			dir1.add(current);
+			p.n[i-1].pos=dir1;
+			p.n[i+1].pos=dir2;
 		}
 	}
+	p.n[1].pos=p5.Vector.sub(p.n[2].pos,p.n[0].pos).mult(0.5).add(p.n[0].pos);
+	p.n[p.n.length-2].pos=p5.Vector.sub(p.n[p.n.length-3].pos,p.n[p.n.length-1].pos).mult(0.5).add(p.n[p.n.length-1].pos);
 }
